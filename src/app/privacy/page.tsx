@@ -18,7 +18,7 @@ export default function PrivacyPage() {
                     prose-p:text-gray-600 prose-p:leading-relaxed">
                     <h2>1. Data Collection</h2>
                     <p>
-                        Cash Cow Intelligence utilizes automated systems to aggregate search trends and generate reporting.
+                        The Capital Sentinel utilizes automated systems to aggregate search trends and generate reporting.
                         We do not collect personal identifiers from casual readers unless explicitly provided via subscription forms.
                     </p>
 

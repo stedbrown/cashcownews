@@ -87,7 +87,7 @@ export default async function Home({
                   <div className="flex items-center gap-4 text-xs font-black uppercase tracking-widest text-gray-400">
                     <span className="flex items-center gap-1.5"><Clock size={14} /> 6 MIN READ</span>
                     <span className="h-4 w-px bg-gray-200" />
-                    <span>BY THE AI MINER</span>
+                    <span>BY THE SENTINEL BUREAU</span>
                     <span className="h-4 w-px bg-gray-200" />
                     <span className="text-primary">LATEST STORY</span>
                   </div>

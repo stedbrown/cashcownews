@@ -18,7 +18,7 @@ export default function AboutPage() {
                     </div>
 
                     <h1 className="text-6xl md:text-8xl font-black serif text-gray-900 mb-8 leading-[1.05] tracking-tight">
-                        About {siteName}
+                        About The Capital Sentinel
                     </h1>
 
                     <p className="text-xl md:text-2xl text-gray-500 serif italic leading-relaxed max-w-2xl mx-auto md:mx-0">

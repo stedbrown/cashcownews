@@ -31,8 +31,8 @@ export default function Navbar() {
                     <div className="bg-primary p-2 rounded-xl group-hover:rotate-12 transition-transform shadow-lg shadow-primary/20">
                         <Zap className="text-white fill-white" size={28} />
                     </div>
-                    <span className="text-4xl md:text-6xl font-black text-gray-900 tracking-tighter serif">
-                        CASH<span className="text-primary">COW</span>
+                    <span className="text-4xl md:text-6xl font-black text-gray-900 tracking-tighter serif text-center">
+                        THE CAPITAL <span className="text-primary">SENTINEL</span>
                     </span>
                 </Link>
 

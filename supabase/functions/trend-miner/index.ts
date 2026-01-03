@@ -82,7 +82,7 @@ serve(async (req: Request) => {
         - meta_description: High-CTR SEO description.
         - category: One of (Finance, Tech, Legal, Software, Insurance).
         - keywords: 5 high-cpc keywords.
-        - image_prompt: A descriptive prompt for DALL-E 3 to create a stunning, viral-worthy cinematic image.
+        - image_prompt: A descriptive prompt for DALL-E 3 to create a stunning, viral-worthy cinematic image for The Capital Sentinel.
         
         Response MUST be strictly JSON.
       `

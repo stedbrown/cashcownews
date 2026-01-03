@@ -11,11 +11,11 @@ export default function Footer() {
                             <div className="bg-primary p-1.5 rounded-lg group-hover:rotate-12 transition-transform">
                                 <Zap className="text-white fill-white" size={20} />
                             </div>
-                            <span className="text-2xl font-black tracking-tighter serif">CASH<span className="text-primary">COW</span></span>
+                            <span className="text-2xl font-black tracking-tighter serif">THE CAPITAL <span className="text-primary">SENTINEL</span></span>
                         </Link>
                         <p className="text-gray-400 text-xs leading-relaxed mb-8 uppercase font-bold tracking-[0.1em]">
-                            Global Content Engine powered by GPT-4o & DALL-E 3.
-                            Processed in Real-Time from Google Trends RSS.
+                            Automated Market Intelligence powered by GPT-4o.
+                            Real-Time Strategic Global Trend Analysis.
                         </p>
                         <div className="flex gap-4">
                             <Link href="#" className="p-2 border border-gray-100 rounded hover:border-primary transition-colors text-gray-400 hover:text-primary">
@@ -49,7 +49,7 @@ export default function Footer() {
 
                 <div className="border-t border-gray-100 pt-12 flex flex-col md:flex-row justify-between items-center gap-8 text-[10px] font-black uppercase tracking-[0.2em] text-gray-300">
                     <div>
-                        © {new Date().getFullYear()} Cash Cow Intelligence Network.
+                        © {new Date().getFullYear()} The Capital Sentinel Network.
                     </div>
                     <div className="flex items-center gap-4">
                         <div className="flex items-center gap-2">

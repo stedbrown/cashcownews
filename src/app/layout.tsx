@@ -18,8 +18,8 @@ const ibarraRealNova = Ibarra_Real_Nova({
 });
 
 export const metadata: Metadata = {
-  title: "Cash Cow Trends | Automated SEO Articles",
-  description: "Daily automated articles based on High-CPC search trends in Finance, Tech, and Insurance.",
+  title: "The Capital Sentinel | Automated Market Intelligence",
+  description: "Daily automated reports based on High-CPC global trends in Finance, Tech, and Industry.",
 };
 
 import Navbar from "@/components/Navbar";
