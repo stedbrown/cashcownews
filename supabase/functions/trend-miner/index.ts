@@ -9,7 +9,7 @@ const openaiKey = Deno.env.get('OPENAI_API_KEY')!
 const supabase = createClient(supabaseUrl, supabaseAnonKey)
 const openai = new OpenAI({ apiKey: openaiKey })
 
-const TRENDS_RSS_URL = "https://trends.google.com/trends/trendingsearches/daily/rss?geo=US"
+const TRENDS_RSS_URL = "https://trends.google.com/trending/rss?geo=US"
 
 const HIGH_CPC_KEYWORDS = [
     'Insurance', 'Loans', 'Mortgage', 'Attorney', 'Credit',
@@ -31,15 +31,19 @@ serve(async (req: Request) => {
         console.log(`Triggering trend-miner. Force Mode: ${forceMode}`)
         const response = await fetch(TRENDS_RSS_URL)
         const xml = await response.text()
+        console.log(`Fetched RSS. Length: ${xml.length}`)
+        if (xml.length < 100) console.log(`RSS Content: ${xml}`)
 
         // Simple regex to extract titles and news items from XML
         const items = [...xml.matchAll(/<item>([\s\S]*?)<\/item>/g)]
+        console.log(`Found ${items.length} items in RSS`)
 
         const allTrends = items.map(match => {
             const content = match[1]
             const title = content.match(/<title>(.*?)<\/title>/)?.[1] || ""
             const description = content.match(/<description>(.*?)<\/description>/)?.[1] || ""
-            return { title, description }
+            const newsTitle = content.match(/<ht:news_item_title>(.*?)<\/ht:news_item_title>/)?.[1] || ""
+            return { title: title, description: newsTitle || description }
         })
 
         // 1. Initial Local Filter
@@ -53,6 +57,8 @@ serve(async (req: Request) => {
         }).slice(0, forceMode ? 1 : 10); // In force mode, just take the first one to avoid high costs
 
         const results = []
+
+        let lastAiResponse = null;
 
         for (const trend of filteredTrends) {
             console.log(`Analyzing trend: ${trend.title}`)
@@ -88,7 +94,7 @@ serve(async (req: Request) => {
       `
 
             const completion = await openai.chat.completions.create({
-                model: "gpt-4o", // Upgraded to flagship
+                model: "gpt-4o",
                 messages: [{ role: "user", content: prompt }],
                 response_format: { type: "json_object" }
             })
@@ -102,7 +108,7 @@ serve(async (req: Request) => {
 
             // Generate Image via DALL-E 3
             console.log(`Generating image for: ${aiResponse.slug}`)
-            let imageUrl = null;
+            let finalImageUrl = null;
             try {
                 const imageGeneration = await openai.images.generate({
                     model: "dall-e-3",
@@ -110,9 +116,34 @@ serve(async (req: Request) => {
                     n: 1,
                     size: "1024x1024",
                 });
-                imageUrl = imageGeneration.data[0].url;
+                const tempImageUrl = imageGeneration.data[0].url!;
+
+                // 3. Persist Image to Supabase Storage
+                console.log(`Persisting image to storage: ${aiResponse.slug}.png`)
+                const imgRes = await fetch(tempImageUrl);
+                const imgBlob = await imgRes.blob();
+
+                const { data: uploadData, error: uploadError } = await supabase
+                    .storage
+                    .from('article-images')
+                    .upload(`${aiResponse.slug}.png`, imgBlob, {
+                        contentType: 'image/png',
+                        upsert: true
+                    });
+
+                if (uploadError) {
+                    console.error("Storage upload failed:", uploadError);
+                    finalImageUrl = tempImageUrl; // Fallback to temp URL if storage fails
+                } else {
+                    const { data: { publicUrl } } = supabase
+                        .storage
+                        .from('article-images')
+                        .getPublicUrl(`${aiResponse.slug}.png`);
+                    finalImageUrl = publicUrl;
+                    console.log(`Permanent image saved: ${finalImageUrl}`);
+                }
             } catch (imgError) {
-                console.error("Image generation failed:", imgError);
+                console.error("Image generation/persistence failed:", imgError);
             }
 
             // Save to Supabase
@@ -125,14 +156,14 @@ serve(async (req: Request) => {
                     meta_description: aiResponse.meta_description,
                     category: aiResponse.category,
                     keywords: aiResponse.keywords,
-                    image_url: imageUrl,
+                    image_url: finalImageUrl,
                     published_at: new Date().toISOString()
                 }, { onConflict: 'slug' })
 
             if (error) {
                 console.error(`Error saving article ${aiResponse.slug}:`, error)
             } else {
-                console.log(`Saved High-CPC article with image: ${aiResponse.slug}`)
+                console.log(`Saved article with permanent image: ${aiResponse.slug}`)
                 results.push(aiResponse.slug)
             }
         }
