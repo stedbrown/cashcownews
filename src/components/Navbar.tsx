@@ -1,4 +1,4 @@
-import { Zap, Menu, Globe } from 'lucide-react';
+import { Zap, Menu } from 'lucide-react';
 import Link from 'next/link';
 
 export default function Navbar() {
@@ -16,11 +16,9 @@ export default function Navbar() {
                 <div className="max-w-7xl mx-auto px-4 flex justify-between items-center text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">
                     <div className="flex gap-6">
                         <span>{today}</span>
-                        <span className="flex items-center gap-1"><Globe size={10} /> International Edition</span>
                     </div>
-                    <div className="flex gap-6">
+                    <div className="flex gap-6 items-center">
                         <Link href="/about" className="hover:text-primary transition-colors">About Us</Link>
-                        <Link href="/subscribe" className="bg-primary text-white px-3 py-1 -mt-1 rounded font-black hover:bg-gray-900 transition-colors">Subscribe</Link>
                     </div>
                 </div>
             </div>
