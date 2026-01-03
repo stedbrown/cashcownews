@@ -1,0 +1,4 @@
+project_id = "juutnuyjgcoonsmpcply"
+
+[functions.trend-miner]
+verify_jwt = false
